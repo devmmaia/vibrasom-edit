@@ -30,7 +30,7 @@
         <div id="results">
             
             <table id="result"></table>
-            <button type="button" id="start">gerar</button>
+            <button type="button" id="start" onclick="gerar();">gerar</button>
             <span id="padrao"></span>
         </div>
     </form>
@@ -65,20 +65,14 @@
             
             count++;
             var row = `<tr><td><span class="row-num">${count}</td>
-                <td><input type="text" class="row-ini" value="${ini}"></input></td>
-                <td><input type="text" class="row-fim" value="${fim}"></input></td>
+                <td><input type="text"  class="row-ini" value="${ini}"></input></td>
+                <td><input type="text"  class="row-fim" value="${fim}"></input></td>
                 </tr>`;
             var newRow = htmlToElement(row);
             var tabela = document.querySelector("#result");
             tabela.appendChild(newRow);
             ini = null;
         }, false);
-
-
-
-        document.querySelector("#start").onclick = () => start();
-        document.querySelector("#pause").onclick = () => pause();
-        document.querySelector("#reset").onclick = () => reset();
 
         function start() {
             pause();
@@ -138,6 +132,32 @@
             var dt = new Date(null);
             dt.setMilliseconds(time * 1000);
             return dt.toISOString().substring(11,23);
+        }
+
+        function getDiferenca(dt1, dt2){
+            var datetime1 = new Date(`1970-01-01T${dt1}Z`);
+            var datetime2 = new Date(`1970-01-01T${dt2}Z`);
+
+            return parseInt((datetime2 - datetime1) / 100);
+        }
+
+        function gerar(){
+            document.querySelector("#padrao").innerHTML = '';
+            var rows = document.querySelector("#result").children;
+            var anterior = "00:00:00.000";
+
+            var padrao = [];
+            for (var i =0; i < rows.length; i++){
+                var ini = rows[i].querySelector(".row-ini").value;
+                var fim = rows[i].querySelector(".row-fim").value;
+
+                padrao.push([getDiferenca(anterior, ini),0]);
+                padrao.push([getDiferenca(ini, fim),1]);
+                anterior = fim;
+
+            }
+
+            document.querySelector("#padrao").innerHTML = JSON.stringify(padrao);
         }
     </script>
 </body>
