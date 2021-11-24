@@ -11,7 +11,12 @@
 </head>
 
 <body>
-
+    <input type="file" accept="audio/*" onchange="changeFile(this);" /><br />
+    <audio id ="audio-player" controls>
+        
+      Your browser does not support the audio element.
+      </audio>
+      
 
     <form name="form_main">
         <div id="time">
@@ -21,12 +26,12 @@
 
         <br />
 
-        <button type="button" id="start">start</button>
-        <button type="button" id="pause">pause</button>
-        <button type="button" id="reset">reset</button>
+        
         <div id="results">
-
+            
             <table id="result"></table>
+            <button type="button" id="start">gerar</button>
+            <span id="padrao"></span>
         </div>
     </form>
 
@@ -84,6 +89,13 @@
             clearInterval(cron);
         }
 
+        function changeFile(obj){
+            var items = obj.value.split("\\");
+            var player = document.querySelector("#audio-player");
+            player.src = items[items.length-1];
+            
+        }
+
         function reset() {
             hour = 0;
             minute = 0;
@@ -122,8 +134,10 @@
 
         function getTime() {
 
-            let time = document.querySelector("#time").innerText;
-            return time;
+            let time = document.querySelector("#audio-player").currentTime;
+            var dt = new Date(null);
+            dt.setMilliseconds(time * 1000);
+            return dt.toISOString().substring(11,23);
         }
     </script>
 </body>
