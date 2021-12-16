@@ -138,7 +138,7 @@
             var datetime1 = new Date(`1970-01-01T${dt1}Z`);
             var datetime2 = new Date(`1970-01-01T${dt2}Z`);
 
-            return parseInt((datetime2 - datetime1) / 100);
+            return parseInt((datetime2 - datetime1));
         }
 
         function gerar(){
@@ -146,18 +146,18 @@
             var rows = document.querySelector("#result").children;
             var anterior = "00:00:00.000";
 
-            var padrao = [];
+            var padrao = [1];
             for (var i =0; i < rows.length; i++){
                 var ini = rows[i].querySelector(".row-ini").value;
                 var fim = rows[i].querySelector(".row-fim").value;
 
-                padrao.push([getDiferenca(anterior, ini),0]);
-                padrao.push([getDiferenca(ini, fim),1]);
+                padrao.push(getDiferenca(anterior, ini));
+                padrao.push(getDiferenca(ini, fim));
                 anterior = fim;
 
             }
 
-            document.querySelector("#padrao").innerHTML = JSON.stringify(padrao);
+            document.querySelector("#padrao").innerHTML = JSON.stringify(padrao).replace("[","{").replace("]","}");
         }
     </script>
 </body>
